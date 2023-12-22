@@ -12,14 +12,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-@RestController
+@Controller
 @CrossOrigin
 public class LoginController {
 
@@ -32,8 +31,15 @@ public class LoginController {
 
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
 
-    @PostMapping("/login")
-    public ResponseEntity<JwtResponse> loginAuth(@RequestBody LoginDTO loginDTO) {
+
+    @GetMapping("/login")
+    public String showLoginForm(Model model) {
+        model.addAttribute("loginDTO", new LoginDTO());
+        return "login";
+    }
+
+    @PostMapping("/authenticate")
+    public ResponseEntity<JwtResponse> loginAuth(@ModelAttribute("loginDTO") LoginDTO loginDTO) {
         Optional<User> user1 = userRepository.findByEmailId(loginDTO.getEmailId());
         try {
             auth.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getEmailId(), loginDTO.getPassword()));

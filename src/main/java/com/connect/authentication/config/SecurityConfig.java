@@ -34,8 +34,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(custom-> custom.disable())
-                .authorizeHttpRequests(auth->auth.requestMatchers("/login","/signup","/home").permitAll().anyRequest().authenticated())
+                .authorizeHttpRequests(auth->auth.requestMatchers("/authenticate","/signup","/home").permitAll().anyRequest().authenticated())
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .formLogin(form->form.loginPage("/login").loginProcessingUrl("/authenticate").
+                        usernameParameter("emailId").passwordParameter("password").defaultSuccessUrl("/home",true).failureUrl("/home/error").permitAll())
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

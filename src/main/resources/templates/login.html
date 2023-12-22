@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -35,15 +35,15 @@
   </style>
   <body>
     <div class="container">
-      <form action="/authenticate" method="POST">
+      <form th:action="@{/authenticate}" method="POST" th:object="${loginDTO}">
         <div class="card bg-dark text-white p-5">
           <div class="card-title">Connect</div>
-          <label for="email">Email Address</label>
-          <input name="email" type="email" />
-          <label for="Password">Password</label>
-          <input name="Password" type="password" />
+          <label  for="email">Email Address</label>
+          <input id="email" name="emailId" type="email" th:field="*{emailId}"/>
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" th:field="*{password}"/>
           <div class="button_wrapper">
-            <div class="btn btn-primary">LOGIN</div>
+            <button type="submit" class="btn btn-primary">LOGIN</button>
             <div class="btn btn-success">Create New Account</div>
           </div>
         </div>
