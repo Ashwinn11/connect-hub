@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -33,11 +34,13 @@ public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(custom-> custom.disable())
+        http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth->auth.requestMatchers("/authenticate","/signup","/home").permitAll().anyRequest().authenticated())
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .formLogin(form->form.loginPage("/login").loginProcessingUrl("/authenticate").
-                        usernameParameter("emailId").passwordParameter("password").defaultSuccessUrl("/home",true).failureUrl("/home/error").permitAll())
+                        usernameParameter("emailId").passwordParameter("password").
+                        defaultSuccessUrl("/home",true).
+                        failureUrl("/home/error").permitAll())
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

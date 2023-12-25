@@ -1,12 +1,14 @@
-FROM openjdk:17-jdk-slim
+# Use a base image with Java and Maven installed
+FROM openjdk:17
 
-# Install dependencies (you can adjust this based on your requirements)
-RUN apt-get update && \
-    apt-get install -y maven && \
-    rm -rf /var/lib/apt/lists/*
-
-# Set working directory
+# Set the working directory in the container
 WORKDIR /app
-# Copy and run your application
-COPY . .
-CMD ["java", "-jar", "authentication-0.0.1-SNAPSHOT.jar"]
+
+# Copy the JAR file built from your Spring Boot application to the container
+COPY target/*.jar /app/app.jar
+
+# Expose the port your Spring Boot app runs on (assuming it's 8080)
+EXPOSE 8080
+
+# Command to run the Spring Boot application when the container starts
+CMD ["java", "-jar", "app.jar"]

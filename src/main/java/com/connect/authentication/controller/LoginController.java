@@ -30,13 +30,13 @@ public class LoginController {
     private JwtService jwtService;
 
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
-
-
     @GetMapping("/login")
     public String showLoginForm(Model model) {
         model.addAttribute("loginDTO", new LoginDTO());
         return "login";
     }
+
+
 
     @PostMapping("/authenticate")
     public ResponseEntity<JwtResponse> loginAuth(@ModelAttribute("loginDTO") LoginDTO loginDTO) {
