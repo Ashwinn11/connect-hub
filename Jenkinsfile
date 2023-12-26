@@ -3,7 +3,7 @@ pipeline{
     agent any
     parameters{
         choice(name:'action', choices: 'create\ndelete', description: 'Choose create/destroy')
-        string(name:'hub_name', description: 'Hub to push the container image',defaultValue='ashwiin11')
+        string(name:'hub_name', description: 'Hub to push the container image', defaultValue: 'ashwiin11')
 
     }
     stages{
