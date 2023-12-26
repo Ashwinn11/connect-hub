@@ -10,7 +10,7 @@ pipeline{
         stage('Git checkout'){
             when { expression { params.action == 'create' } }
             steps {
-                echo Git checkout done
+                sh 'echo Git checkout done'
             }
         }
         stage('Docker build'){
