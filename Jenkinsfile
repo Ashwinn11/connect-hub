@@ -15,6 +15,18 @@ pipeline {
                 sh 'echo Git checkout done'
             }
         }
+        stage('Maven build'){
+            when {
+                expression{
+                    params.action== 'create'
+                }
+            }
+            steps{
+                script{
+                    sh 'mvn clean install'
+                }
+            }
+        }
         stage('Docker build') {
             when {
                 expression {
