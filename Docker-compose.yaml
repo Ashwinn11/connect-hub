@@ -23,7 +23,7 @@ services:
       spring-boot-mysql-net:
   spring-boot-app:
     container_name: authentication-app
-    image: connect-authentication:latest
+    image: ashwiin11/connect-auth
     ports:
       - "8080:8080"
     environment:
