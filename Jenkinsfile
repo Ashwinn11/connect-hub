@@ -2,7 +2,7 @@ pipeline {
     agent any
     parameters {
         choice(name: 'action', choices: 'create\ndelete', description: 'Choose create/destroy')
-        string(name: 'hub_name', description: 'Hub to push the container image', defaultValue: 'ashwiin11')
+        string(name: 'hubName', description: 'Hub to push the container image', defaultValue: 'ashwiin11')
     }
     stages {
         stage('Git checkout') {
@@ -40,8 +40,8 @@ pipeline {
                         sh "docker login -u $username -p $password"
                         sh '''
                             docker build -t connect-authentication .
-                            docker tag connect-authentication ashwiin11/connect-auth:1.1
-                            docker push ashwiin11/connect-auth:1.1
+                            docker tag connect-authentication ${params.hubName}/connect-auth:1.1
+                            docker push ${params.hubName}/connect-auth:1.1
                         '''
                         // Logout from Docker registry
                         sh 'docker logout'
