@@ -1,0 +1,40 @@
+version : '3.8'
+services:
+  db:
+    image: mysql
+    container_name: db
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_DATABASE : login
+      MYSQL_ROOT_PASSWORD : database
+    volumes:
+      - mysql:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      spring-boot-mysql-net:
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "9000:8080"
+    networks:
+      spring-boot-mysql-net:
+  spring-boot-app:
+    container_name: authentication-app
+    image: ashwiin11/connect-auth
+    ports:
+      - "8080:8080"
+    environment:
+      - spring.datasource.url=jdbc:mysql://db:3306/login?allowPublicKeyRetrieval=true
+    depends_on:
+      - db
+    networks:
+      spring-boot-mysql-net:
+    restart: on-failure
+volumes:
+  mysql:
+    driver: local
+networks:
+  spring-boot-mysql-net:
