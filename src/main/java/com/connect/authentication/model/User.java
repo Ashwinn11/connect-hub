@@ -1,5 +1,6 @@
 package com.connect.authentication.model;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +24,6 @@ public class User implements UserDetails {
     public Long id;
     public String firstName;
     public String lastName;
-    @Column(unique = true)
     public String emailId;
     public String password;
     public String mobileNo;
