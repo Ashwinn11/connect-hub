@@ -13,14 +13,16 @@ services:
     ports:
       - "3306:3306"
     networks:
-      spring-boot-mysql-net:
+      authentication:
   adminer:
     image: adminer
     restart: always
     ports:
       - "9000:8080"
+    depends_on:
+      - db
     networks:
-      spring-boot-mysql-net:
+      authentication:
   spring-boot-app:
     container_name: authentication-app
     build:
@@ -33,10 +35,10 @@ services:
     depends_on:
       - db
     networks:
-      spring-boot-mysql-net:
+      authentication:
     restart: on-failure
 volumes:
   mysql:
     driver: local
 networks:
-  spring-boot-mysql-net:
+  authentication:
