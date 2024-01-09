@@ -23,20 +23,6 @@ services:
       - db
     networks:
       authentication:
-  spring-boot-app:
-    container_name: authentication-app
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-    environment:
-      - spring.datasource.url=jdbc:mysql://db:3306/login?allowPublicKeyRetrieval=true
-    depends_on:
-      - db
-    networks:
-      authentication:
-    restart: on-failure
 volumes:
   mysql:
     driver: local

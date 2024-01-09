@@ -4,6 +4,8 @@ import com.connect.authentication.model.JwtResponse;
 import com.connect.authentication.model.Role;
 import com.connect.authentication.model.Signup;
 import com.connect.authentication.model.User;
+import com.connect.authentication.profile.model.Profile;
+import com.connect.authentication.profile.service.ProfileService;
 import com.connect.authentication.repository.UserRepository;
 import com.connect.authentication.validator.SignupValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,8 @@ public class UserService {
     @Autowired
     public JwtService jwtService;
 
+    @Autowired
+    private ProfileService profileService;
     public SignupValidator validator;
 
     public JwtResponse registerUser(Signup signup) throws Exception {
@@ -36,6 +40,7 @@ public class UserService {
                 .password(passwordEncoder.encode(signup.getPassword()))
                 .role(Role.USER).build();
         userRepository.save(user);
+        profileService.mapUserToProfile(user);
         String token = jwtService.generateToken(user);
         return JwtResponse.builder().token(token).build();
 
