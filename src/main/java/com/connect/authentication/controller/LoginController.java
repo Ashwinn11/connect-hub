@@ -30,16 +30,9 @@ public class LoginController {
     private JwtService jwtService;
 
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
-    @GetMapping("/login")
-    public String showLoginForm(Model model) {
-        model.addAttribute("loginDTO", new LoginDTO());
-        return "login";
-    }
-
-
 
     @PostMapping("/authenticate")
-    public ResponseEntity<JwtResponse> loginAuth(@ModelAttribute("loginDTO") LoginDTO loginDTO) {
+    public ResponseEntity<JwtResponse> loginAuth( @RequestBody LoginDTO loginDTO) {
         Optional<User> user1 = userRepository.findByEmailId(loginDTO.getEmailId());
         try {
             auth.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getEmailId(), loginDTO.getPassword()));
