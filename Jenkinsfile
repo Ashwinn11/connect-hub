@@ -40,11 +40,10 @@ pipeline {
                         sh "docker login -u $username -p $password"
                         sh '''
                             docker build -t connect-authentication .
-                            docker tag connect-authentication ${params.hubName}/connect-auth:1.1
-                            docker push ${params.hubName}/connect-auth:1.1
+                            docker tag connect-authentication ashwiin11/connect-auth:1.1
+                            docker push ashwiin11/connect-auth:1.1
                         '''
-                        // Logout from Docker registry
-                        sh 'docker logout'
+
                     }
                 }
             }
