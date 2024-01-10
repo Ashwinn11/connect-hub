@@ -1,5 +1,5 @@
-package com.connect.hub.repository;
-import com.connect.hub.model.User;
+package com.connect.hub.auth.repository;
+import com.connect.hub.auth.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

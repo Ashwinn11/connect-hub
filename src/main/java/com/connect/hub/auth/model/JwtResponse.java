@@ -1,4 +1,4 @@
-package com.connect.hub.model;
+package com.connect.hub.auth.model;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -1,6 +1,6 @@
-package com.connect.hub.config;
+package com.connect.hub.auth.config;
 
-import com.connect.hub.repository.UserRepository;
+import com.connect.hub.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

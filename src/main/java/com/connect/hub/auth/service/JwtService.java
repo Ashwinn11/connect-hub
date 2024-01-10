@@ -1,4 +1,4 @@
-package com.connect.hub.service;
+package com.connect.hub.auth.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

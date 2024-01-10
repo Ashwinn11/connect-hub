@@ -1,6 +1,6 @@
-package com.connect.hub.config;
+package com.connect.hub.auth.config;
 
-import com.connect.hub.service.JwtService;
+import com.connect.hub.auth.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
