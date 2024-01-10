@@ -1,9 +1,8 @@
 version : '3.8'
 services:
-  db:
+  database:
     image: mysql
-    container_name: db
-    command: --default-authentication-plugin=mysql_native_password
+    container_name: mysql-container
     restart: always
     environment:
       MYSQL_DATABASE : login
@@ -13,18 +12,19 @@ services:
     ports:
       - "3306:3306"
     networks:
-      authentication:
+      - connect
   adminer:
     image: adminer
+    container_name: adminer-container
     restart: always
     ports:
       - "9000:8080"
     depends_on:
-      - db
+      - database
     networks:
-      authentication:
+      - connect
 volumes:
   mysql:
     driver: local
 networks:
-  authentication:
+  connect:
