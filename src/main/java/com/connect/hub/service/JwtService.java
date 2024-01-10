@@ -1,4 +1,4 @@
-package com.connect.authentication.service;
+package com.connect.hub.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -6,9 +6,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.codec.Hex;
 import org.springframework.stereotype.Component;
-import java.io.Serializable;
+
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;

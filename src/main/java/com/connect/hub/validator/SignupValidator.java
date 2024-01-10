@@ -1,6 +1,6 @@
-package com.connect.authentication.validator;
+package com.connect.hub.validator;
 
-import com.connect.authentication.model.Signup;
+import com.connect.hub.model.Signup;
 
 import java.util.regex.*;
 class InvalidSignupDataException extends Exception {

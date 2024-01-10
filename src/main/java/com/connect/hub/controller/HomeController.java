@@ -1,6 +1,6 @@
-package com.connect.authentication.controller;
+package com.connect.hub.controller;
 
-import com.connect.authentication.repository.UserRepository;
+import com.connect.hub.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

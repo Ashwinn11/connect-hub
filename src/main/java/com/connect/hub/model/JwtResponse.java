@@ -1,9 +1,7 @@
-package com.connect.authentication.model;
+package com.connect.hub.model;
 
 import lombok.Builder;
 import lombok.Getter;
-
-import java.io.Serializable;
 
 @Getter
 @Builder

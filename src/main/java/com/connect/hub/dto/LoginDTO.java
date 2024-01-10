@@ -1,4 +1,4 @@
-package com.connect.authentication.dto;
+package com.connect.hub.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

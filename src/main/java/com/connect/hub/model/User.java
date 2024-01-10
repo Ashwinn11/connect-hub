@@ -1,6 +1,5 @@
-package com.connect.authentication.model;
+package com.connect.hub.model;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,11 +1,11 @@
-package com.connect.authentication.service;
+package com.connect.hub.service;
 
-import com.connect.authentication.model.JwtResponse;
-import com.connect.authentication.model.Role;
-import com.connect.authentication.model.Signup;
-import com.connect.authentication.model.User;
-import com.connect.authentication.repository.UserRepository;
-import com.connect.authentication.validator.SignupValidator;
+import com.connect.hub.model.JwtResponse;
+import com.connect.hub.model.Role;
+import com.connect.hub.model.Signup;
+import com.connect.hub.model.User;
+import com.connect.hub.repository.UserRepository;
+import com.connect.hub.validator.SignupValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

@@ -1,9 +1,8 @@
 version : '3.8'
 services:
-  db:
+  database:
     image: mysql
-    container_name: db
-    command: --default-authentication-plugin=mysql_native_password
+    container_name: mysql-container
     restart: always
     environment:
       MYSQL_DATABASE : login
@@ -13,32 +12,33 @@ services:
     ports:
       - "3306:3306"
     networks:
-      authentication:
+      - connect
   adminer:
     image: adminer
+    container_name: adminer-container
     restart: always
     ports:
       - "9000:8080"
     depends_on:
-      - db
+      - database
     networks:
-      authentication:
-  spring-boot-app:
-    container_name: authentication-app
+      - connect
+  connect-hub:
+    container_name: connect-container
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
     environment:
-      - spring.datasource.url=jdbc:mysql://db:3306/login?allowPublicKeyRetrieval=true
+      - spring.datasource.url=jdbc:mysql://database:3306/login
     depends_on:
-      - db
+      - database
     networks:
-      authentication:
+      - connect
     restart: on-failure
 volumes:
   mysql:
     driver: local
 networks:
-  authentication:
+  connect:

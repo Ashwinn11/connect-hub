@@ -1,9 +1,9 @@
-package com.connect.authentication.controller;
-import com.connect.authentication.dto.LoginDTO;
-import com.connect.authentication.model.JwtResponse;
-import com.connect.authentication.model.User;
-import com.connect.authentication.repository.UserRepository;
-import com.connect.authentication.service.JwtService;
+package com.connect.hub.controller;
+import com.connect.hub.dto.LoginDTO;
+import com.connect.hub.model.JwtResponse;
+import com.connect.hub.model.User;
+import com.connect.hub.repository.UserRepository;
+import com.connect.hub.service.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

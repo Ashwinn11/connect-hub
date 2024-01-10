@@ -1,8 +1,8 @@
-package com.connect.authentication.controller;
+package com.connect.hub.controller;
 
-import com.connect.authentication.model.JwtResponse;
-import com.connect.authentication.model.Signup;
-import com.connect.authentication.service.UserService;
+import com.connect.hub.model.JwtResponse;
+import com.connect.hub.model.Signup;
+import com.connect.hub.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
