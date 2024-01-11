@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.connect</groupId>
-	<artifactId>Connect</artifactId>
+	<artifactId>connect</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>hub</name>
 	<description>A door way to connect everyone </description>

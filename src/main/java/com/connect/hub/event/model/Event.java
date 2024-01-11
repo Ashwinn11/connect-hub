@@ -1,4 +1,4 @@
-package com.connect.hub.event;
+package com.connect.hub.event.model;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
+
 @Document("event")
 @Data
 @RequiredArgsConstructor
@@ -16,7 +18,9 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String firstName;
-    private String lastName;
+    private String eventName;
+    private String description;
+    private LocalDateTime localDateTime;
+    private Integer limit;
 
 }
