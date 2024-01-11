@@ -1,30 +1,47 @@
 version : '3.8'
 services:
-  database:
+  mysqldb:
     image: mysql
     container_name: mysql-container
     restart: always
     environment:
-      MYSQL_DATABASE : login
+      MYSQL_DATABASE : user
       MYSQL_ROOT_PASSWORD : database
     volumes:
-      - mysql:/var/lib/mysql
+      - mysqldb:/var/lib/mysql
     ports:
       - "3306:3306"
     networks:
       - connect
+  mongodb:
+    image: mongo
+    container_name: mongodb-container
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: database
+      MONGO_INITDB_DATABASE: event
+    ports:
+      - "27017:27017"
+    networks:
+      - connect
+    volumes:
+      - mongodb:/data/db
   adminer:
-    image: adminer
+    image: dockette/adminer:full
     container_name: adminer-container
     restart: always
     ports:
-      - "9000:8080"
+      - "9000:80"
     depends_on:
-      - database
+      - mysqldb
+      - mongodb
     networks:
       - connect
-volumes:
-  mysql:
-    driver: local
 networks:
   connect:
+volumes:
+  mysqldb:
+    driver: local
+  mongodb:
+    driver: local
