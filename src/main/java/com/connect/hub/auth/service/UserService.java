@@ -30,9 +30,6 @@ public class UserService {
                 .lastName(signup.getLastName())
                 .emailId(signup.getEmailId())
                 .mobileNo(signup.getMobileNo())
-                .country(signup.getCountry())
-                .regionCode(signup.getRegionCode())
-                .state(signup.getState())
                 .password(passwordEncoder.encode(signup.getPassword()))
                 .role(Role.USER).build();
         userRepository.save(user);
