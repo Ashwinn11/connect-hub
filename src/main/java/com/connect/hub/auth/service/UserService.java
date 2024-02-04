@@ -31,6 +31,9 @@ public class UserService {
                 .emailId(signup.getEmailId())
                 .mobileNo(signup.getMobileNo())
                 .password(passwordEncoder.encode(signup.getPassword()))
+                .country(signup.getCountry())
+                .regionCode(signup.getRegionCode())
+                .state(signup.getState())
                 .role(Role.USER).build();
         userRepository.save(user);
         String token = jwtService.generateToken(user);

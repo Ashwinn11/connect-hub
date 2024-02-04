@@ -1,5 +1,6 @@
 package com.connect.hub.auth.model;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,9 @@ public class Signup {
     public String emailId;
     public String password;
     public String mobileNo;
+    public String regionCode;
+    public String state;
+    public String country;
 
 }
 
