@@ -1,12 +1,15 @@
 package com.connect.hub.auth.service;
 
-import com.connect.hub.auth.model.JwtResponse;
 import com.connect.hub.auth.model.Role;
 import com.connect.hub.auth.model.Signup;
 import com.connect.hub.auth.model.User;
+import com.connect.hub.mail.controller.EmailController;
 import com.connect.hub.profile.service.ProfileService;
 import com.connect.hub.auth.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +28,22 @@ public class UserService {
     @Autowired
     private ProfileService profileService;
 
-    public JwtResponse registerUser(Signup signup) throws Exception {
+    @Autowired
+    private EmailController emailController;
+    public ResponseEntity<?> registerUser(Signup signup) {
+        ResponseEntity<HttpStatusCode> response = emailController.sendEmail(signup.getEmailId());
+        if (response.getStatusCode().isSameCodeAs(HttpStatus.OK)) {
+            User user = userBuild(signup);
+            userRepository.save(user);
+            profileService.mapUserToProfile(user);
+            return new ResponseEntity<>("Sign-up successful.", HttpStatus.ACCEPTED);
+
+        }
+        return new ResponseEntity<>("Verification code is not valid.", HttpStatus.BAD_REQUEST);
+
+    }
+
+    public User userBuild(Signup signup){
         User user = User.builder()
                 .firstName(signup.getFirstName())
                 .lastName(signup.getLastName())
@@ -36,11 +54,7 @@ public class UserService {
                 .state(signup.getState())
                 .password(passwordEncoder.encode(signup.getPassword()))
                 .role(Role.USER).build();
-        userRepository.save(user);
-        profileService.mapUserToProfile(user);
-        String token = jwtService.generateToken(user);
-        return JwtResponse.builder().token(token).build();
+        return user;
 
     }
-
 }

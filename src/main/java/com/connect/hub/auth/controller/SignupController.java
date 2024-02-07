@@ -4,6 +4,8 @@ import com.connect.hub.auth.model.JwtResponse;
 import com.connect.hub.auth.model.Signup;
 import com.connect.hub.auth.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,8 +19,8 @@ public class SignupController {
     @Autowired
     private UserService userService;
     @PostMapping("/signup")
-    public ResponseEntity<JwtResponse> signup(@RequestBody Signup signup) throws Exception {
-       return ResponseEntity.ok(userService.registerUser(signup));
+    public ResponseEntity<?> signup(@RequestBody Signup signup) throws Exception {
+       return userService.registerUser(signup);
     }
 
 }
