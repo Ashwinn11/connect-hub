@@ -28,12 +28,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth->auth.requestMatchers("/authenticate","/signup","/home","/event/**").permitAll().anyRequest().authenticated())
+                .authorizeHttpRequests(auth->auth.requestMatchers("/authenticate","/signup","/home","/event/**","/mail").permitAll().anyRequest().authenticated())
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .formLogin(form->form.loginPage("/login").loginProcessingUrl("/authenticate").
-//                        usernameParameter("emailId").passwordParameter("password").
-//                        defaultSuccessUrl("/home",true).
-//                        failureUrl("/home/error").permitAll())
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
