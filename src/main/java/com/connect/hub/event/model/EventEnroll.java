@@ -9,5 +9,5 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EventEnroll {
     public String emailId;
-    public long eventId;
+    public String eventId;
 }

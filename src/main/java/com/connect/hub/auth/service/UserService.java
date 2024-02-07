@@ -6,7 +6,6 @@ import com.connect.hub.auth.model.Signup;
 import com.connect.hub.auth.model.User;
 import com.connect.hub.profile.service.ProfileService;
 import com.connect.hub.auth.repository.UserRepository;
-import com.connect.hub.auth.validator.SignupValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,6 @@ public class UserService {
 
     @Autowired
     private ProfileService profileService;
-    public SignupValidator validator;
 
     public JwtResponse registerUser(Signup signup) throws Exception {
         User user = User.builder()

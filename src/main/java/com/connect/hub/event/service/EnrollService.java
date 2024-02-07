@@ -22,7 +22,13 @@ public class EnrollService {
         Optional<Event> optionalEvent = eventRepository.findById(enroll.getEventId());
         if (optionalEvent.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         else {
-            booking(optionalEvent.get());
+            Event event = optionalEvent.get();
+            if (event.getLimit()<=0){
+                return new ResponseEntity<>(HttpStatus.REQUEST_TIMEOUT);
+            }
+            else {
+                booking(event);
+            }
         }
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
