@@ -16,16 +16,17 @@ public class EmailService {
     @Autowired
     private JavaMailSender javaMailSender;
 
-    public ResponseEntity<HttpStatusCode> sendSignupEmail(String emailId){
+
+    public ResponseEntity<?> sendSignupEmail(String emailId){
         Random random = new Random();
         int otp = random.nextInt(999999);
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(emailId);
         mailMessage.setSubject("ConnectHub- OTP ");
-
         String text = String.format("Dear user,Please enter the verification code (%06d) to complete the Sign-up process.",otp);
         mailMessage.setText(text);
         javaMailSender.send(mailMessage);
-        return new ResponseEntity<>(HttpStatusCode.valueOf(200));
+        return new ResponseEntity<>(otp,HttpStatus.ACCEPTED);
     }
+
 }

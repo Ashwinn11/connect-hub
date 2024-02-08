@@ -1,12 +1,9 @@
 package com.connect.hub.auth.controller;
 
-import com.connect.hub.auth.model.JwtResponse;
 import com.connect.hub.auth.model.Signup;
 import com.connect.hub.auth.service.UserService;
 import com.connect.hub.mail.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,9 +21,10 @@ public class SignupController {
        return userService.registerUser(signup);
     }
 
-    @PostMapping("/signup/verify")
-    public ResponseEntity<?> otpVerify(@RequestParam String emailId){
+    @GetMapping("/signup/verify")
+    public ResponseEntity<?> sendOtp(@RequestParam String emailId){
         return emailService.sendSignupEmail(emailId);
     }
+
 
 }
