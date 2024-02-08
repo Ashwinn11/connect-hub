@@ -31,15 +31,10 @@ public class UserService {
     @Autowired
     private EmailController emailController;
     public ResponseEntity<?> registerUser(Signup signup) {
-        ResponseEntity<HttpStatusCode> response = emailController.sendEmail(signup.getEmailId());
-        if (response.getStatusCode().isSameCodeAs(HttpStatus.OK)) {
-            User user = userBuild(signup);
-            userRepository.save(user);
-            profileService.mapUserToProfile(user);
-            return new ResponseEntity<>("Sign-up successful.", HttpStatus.ACCEPTED);
-
-        }
-        return new ResponseEntity<>("Verification code is not valid.", HttpStatus.BAD_REQUEST);
+        User user = userBuild(signup);
+        userRepository.save(user);
+        profileService.mapUserToProfile(user);
+        return new ResponseEntity<>("Sign-up successful.", HttpStatus.ACCEPTED);
 
     }
 

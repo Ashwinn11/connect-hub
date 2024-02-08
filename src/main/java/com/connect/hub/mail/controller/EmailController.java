@@ -14,10 +14,4 @@ public class EmailController {
     @Autowired
     private EmailService emailService;
 
-
-    public ResponseEntity<HttpStatusCode> sendEmail(String emailId){
-        return emailService.sendSignupEmail(emailId);
-
-    }
-
 }

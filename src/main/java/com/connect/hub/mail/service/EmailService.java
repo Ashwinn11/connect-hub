@@ -23,8 +23,7 @@ public class EmailService {
         mailMessage.setTo(emailId);
         mailMessage.setSubject("ConnectHub- OTP ");
 
-        String text = String.format("Dear user, " +
-                "Please enter the verification code (%06d) to complete the Sign-up process.",otp);
+        String text = String.format("Dear user,Please enter the verification code (%06d) to complete the Sign-up process.",otp);
         mailMessage.setText(text);
         javaMailSender.send(mailMessage);
         return new ResponseEntity<>(HttpStatusCode.valueOf(200));

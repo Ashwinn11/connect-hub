@@ -3,14 +3,12 @@ package com.connect.hub.auth.controller;
 import com.connect.hub.auth.model.JwtResponse;
 import com.connect.hub.auth.model.Signup;
 import com.connect.hub.auth.service.UserService;
+import com.connect.hub.mail.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
@@ -18,9 +16,17 @@ public class SignupController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private EmailService emailService;
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody Signup signup) throws Exception {
        return userService.registerUser(signup);
+    }
+
+    @PostMapping("/signup/verify")
+    public ResponseEntity<?> otpVerify(@RequestParam String emailId){
+        return emailService.sendSignupEmail(emailId);
     }
 
 }
