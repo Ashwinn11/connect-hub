@@ -25,17 +25,17 @@ public class EventController {
 
     @Autowired
     private EventService eventService;
-    @GetMapping("/event-list")
+    @GetMapping("/eventList")
     public List<Event> getEventList(){
         return eventRepository.findAll();
     }
 
-    @PostMapping("/create-event")
+    @PostMapping("/createEvent")
     public ResponseEntity<String> createUpcomingEvent(@RequestBody Event event){
         return eventService.createEvent(event);
     }
 
-    @PostMapping("/enroll")
+    @PostMapping("/eventEnroll")
     public ResponseEntity<HttpStatusCode> enroll(@RequestBody EventEnroll enroll) throws InterruptedException {
         return enrollService.enroll(enroll);
     }
