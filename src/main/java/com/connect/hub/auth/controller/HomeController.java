@@ -18,14 +18,4 @@ public class HomeController {
     public String getEnd() {
         return "index";
     }
-
-    @GetMapping("/error")
-    public String errorPage() {
-        return "error";
-    }
-
-    @GetMapping("/secure")
-    public String secured(){
-        return "secured";
-    }
 }

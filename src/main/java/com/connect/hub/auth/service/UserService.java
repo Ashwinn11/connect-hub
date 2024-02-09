@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 
 @Service
 public class UserService {
@@ -31,14 +33,18 @@ public class UserService {
     @Autowired
     private EmailController emailController;
     public ResponseEntity<?> registerUser(Signup signup) {
-        User user = userBuild(signup);
+        Optional<User> userCheck = userRepository.findByEmailId(signup.getEmailId());
+        if (userCheck.isPresent()) {
+            return new ResponseEntity<>("Email-ID already exists. Please try logging in!",HttpStatus.IM_USED);
+        }
+        User user = buildUser(signup);
         userRepository.save(user);
         profileService.mapUserToProfile(user);
         return new ResponseEntity<>("Sign-up successful.", HttpStatus.ACCEPTED);
 
     }
 
-    public User userBuild(Signup signup){
+    public User buildUser(Signup signup){
         User user = User.builder()
                 .firstName(signup.getFirstName())
                 .lastName(signup.getLastName())
