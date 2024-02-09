@@ -41,7 +41,7 @@ public class LoginController {
         }
         catch (BadCredentialsException e) {
             log.error("Bad credentials for user: {}", loginDTO.getEmailId(), e);
-            return ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT).build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         catch (Exception ex) {
             log.error("Exception during authentication for user: {}", loginDTO.getEmailId(), ex);

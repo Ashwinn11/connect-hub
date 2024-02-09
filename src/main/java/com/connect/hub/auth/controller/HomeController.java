@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/home")
-@CrossOrigin
 public class HomeController {
     @Autowired
     private UserRepository userRepository;
