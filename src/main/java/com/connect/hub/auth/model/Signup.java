@@ -8,12 +8,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class Signup {
 
-    public String firstName;
-    public String lastName;
-    public String emailId;
-    public String password;
-    public String mobileNo;
-    public String regionCode;
-    public String state;
-    public String country;
+    private String firstName;
+    private String lastName;
+    private String emailId;
+    private String password;
+    private String mobileNo;
+    private String regionCode;
+    private String state;
+    private String country;
 }

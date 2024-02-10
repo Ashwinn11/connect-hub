@@ -21,10 +21,6 @@ public class SignupController {
        return userService.registerUser(signup);
     }
 
-    @GetMapping("/signup/verify")
-    public ResponseEntity<?> sendOtp(@RequestParam String emailId){
-        return emailService.sendSignupEmail(emailId);
-    }
 
 
 }

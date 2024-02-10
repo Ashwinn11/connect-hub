@@ -33,10 +33,12 @@ public class UserService {
     @Autowired
     private EmailController emailController;
     public ResponseEntity<?> registerUser(Signup signup) {
+
         Optional<User> userCheck = userRepository.findByEmailId(signup.getEmailId());
         if (userCheck.isPresent()) {
             return new ResponseEntity<>("Email-ID already exists. Please try logging in!",HttpStatus.IM_USED);
         }
+        emailController.sendOtp(signup.getEmailId());
         User user = buildUser(signup);
         userRepository.save(user);
         profileService.mapUserToProfile(user);
