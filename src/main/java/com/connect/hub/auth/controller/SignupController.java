@@ -17,8 +17,8 @@ public class SignupController {
     @Autowired
     private EmailService emailService;
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody Signup signup) throws Exception {
-       return userService.registerUser(signup);
+    public ResponseEntity<?> createUser(@RequestBody Signup signup) throws Exception {
+       return userService.sendOTP(signup);
     }
 
 

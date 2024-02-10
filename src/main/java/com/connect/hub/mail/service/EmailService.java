@@ -1,7 +1,13 @@
 package com.connect.hub.mail.service;
 
+import com.connect.hub.auth.model.Role;
+import com.connect.hub.auth.model.Signup;
+import com.connect.hub.auth.model.User;
+import com.connect.hub.auth.repository.UserRepository;
+import com.connect.hub.auth.service.UserService;
 import com.connect.hub.mail.model.OTP;
 import com.connect.hub.mail.repository.OTPRepository;
+import com.connect.hub.profile.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
@@ -9,6 +15,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,6 +30,15 @@ public class EmailService {
     @Autowired
     private OTPRepository otpRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private ProfileService profileService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 
     public ResponseEntity<?> sendSignupEmail(String emailId){
         Random random = new Random();
@@ -33,20 +49,43 @@ public class EmailService {
         String text = String.format("Dear user,Please enter the verification code (%06d) to complete the Sign-up process.",otp);
         mailMessage.setText(text);
         javaMailSender.send(mailMessage);
-        OTP otp1 = new OTP();
-        otp1.setEmailId(emailId);
-        otp1.setCreationTime(LocalDateTime.now());
-        otp1.setOtp(otp);
-        otpRepository.save(otp1);
-        return new ResponseEntity<>("Email sent successfully! Please entry the otp for verification.",HttpStatus.CONTINUE);
+        otpObject(emailId,otp);
+        return new ResponseEntity<>("Email sent successfully! Please entry the otp for verification.",HttpStatus.ACCEPTED);
     }
 
-    public ResponseEntity<?> veriyOtp(int otp,String emailId){
+    public ResponseEntity<?> verifyOtp(int otp, String emailId, Signup signup){
         OTP object = otpRepository.findByEmailId(emailId);
         if (object.getOtp() == otp && LocalDateTime.now().isBefore(object.getCreationTime().plusSeconds(60))){
-            return new ResponseEntity<>(true,HttpStatus.ACCEPTED);
+            User user = buildUser(signup);
+            userRepository.save(user);
+            profileService.mapUserToProfile(user);
+            return new ResponseEntity<>("Sign-up successful.", HttpStatus.ACCEPTED);
+
         }
-        return new ResponseEntity<>(false,HttpStatus.NOT_ACCEPTABLE);
+        return new ResponseEntity<>("OTP is not valid. Please try again later!",HttpStatus.NOT_ACCEPTABLE);
+    }
+
+    public void otpObject(String emailId, int otp){
+        OTP otpObject = new OTP();
+        otpObject.setEmailId(emailId);
+        otpObject.setCreationTime(LocalDateTime.now());
+        otpObject.setOtp(otp);
+        otpRepository.save(otpObject);
+    }
+
+    public User buildUser(Signup signup){
+        User user = User.builder()
+                .firstName(signup.getFirstName())
+                .lastName(signup.getLastName())
+                .emailId(signup.getEmailId())
+                .mobileNo(signup.getMobileNo())
+                .country(signup.getCountry())
+                .regionCode(signup.getRegionCode())
+                .state(signup.getState())
+                .password(passwordEncoder.encode(signup.getPassword()))
+                .role(Role.USER).build();
+        return user;
+
     }
 
 }
