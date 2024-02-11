@@ -88,4 +88,7 @@ public class EmailService {
 
     }
 
+    public ResponseEntity<?> recoverOtp(String emailId) {
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
 }
