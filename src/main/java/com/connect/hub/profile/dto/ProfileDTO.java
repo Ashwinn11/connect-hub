@@ -15,8 +15,5 @@ public class ProfileDTO {
     private String lastName;
     private String imageUrl;
     private String emailId;
-    private String regionCode;
-    private String state;
-    private String country;
     private String bio;
 }

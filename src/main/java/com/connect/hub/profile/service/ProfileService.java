@@ -16,11 +16,7 @@ public class ProfileService {
         Profile profile = Profile.builder()
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
-                .state(user.getState())
-                .regionCode(user.getRegionCode())
                 .emailId(user.getEmailId())
-                .country(user.getCountry())
-                .regionCode(user.getRegionCode())
                 .build();
         profileRepository.save(profile);
 
@@ -28,12 +24,9 @@ public class ProfileService {
 
     public Profile editProfile(ProfileDTO profileDto,Profile profile) {
         profile.setBio(profileDto.getBio());
-        profile.setCountry(profileDto.getCountry());
-        profile.setState(profileDto.getState());
         profile.setFirstName(profileDto.getFirstName());
         profile.setLastName(profileDto.getLastName());
         profile.setImageUrl(profileDto.getImageUrl());
-        profile.setRegionCode(profileDto.getRegionCode());
         profileRepository.save(profile);
         return profile;
     }

@@ -29,15 +29,6 @@ public class Profile {
     @Column(nullable = false,unique = true)
     private String emailId;
 
-    @Column(nullable = false)
-    private String regionCode;
-
-    @Column(nullable = false)
-    private String state;
-
-    @Column(nullable = false)
-    private String country;
-
     private String bio;
 
 }
