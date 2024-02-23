@@ -21,6 +21,4 @@ public class SignupController {
        return userService.sendOTP(signup);
     }
 
-
-
 }

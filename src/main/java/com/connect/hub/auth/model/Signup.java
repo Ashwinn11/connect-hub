@@ -13,7 +13,4 @@ public class Signup {
     private String emailId;
     private String password;
     private String mobileNo;
-    private String regionCode;
-    private String state;
-    private String country;
 }

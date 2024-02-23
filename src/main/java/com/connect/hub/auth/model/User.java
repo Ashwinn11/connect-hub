@@ -31,12 +31,6 @@ public class User implements UserDetails {
     public String password;
     @Column(nullable = false)
     public String mobileNo;
-    @Column(nullable = false)
-    public String regionCode;
-    @Column(nullable = false)
-    public String state;
-    @Column(nullable = false)
-    public String country;
     @Enumerated(EnumType.STRING)
     public Role role;
 
