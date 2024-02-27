@@ -1,32 +1,25 @@
 package com.connect.hub.profile.model;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-
 @Data
 @Entity
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Builder
-public class Profile {
+public class ImageData {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
-    @Column(nullable = false)
-    private String firstName;
-
-    @Column(nullable = false)
-    private String lastName;
-
-    @Column(nullable = false,unique = true)
+    @Column(unique = true)
     private String emailId;
-
-    private String bio;
-
+    private String name;
+    private String type;
+    @Lob
+    @Column(length = 1000)
+    private byte[] imageData;
 }

@@ -19,14 +19,12 @@ public class ProfileService {
                 .emailId(user.getEmailId())
                 .build();
         profileRepository.save(profile);
-
     }
 
     public Profile editProfile(ProfileDTO profileDto,Profile profile) {
         profile.setBio(profileDto.getBio());
         profile.setFirstName(profileDto.getFirstName());
         profile.setLastName(profileDto.getLastName());
-        profile.setImageUrl(profileDto.getImageUrl());
         profileRepository.save(profile);
         return profile;
     }

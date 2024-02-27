@@ -13,7 +13,6 @@ public class ProfileDTO {
     private long id;
     private String firstName;
     private String lastName;
-    private String imageUrl;
     private String emailId;
     private String bio;
 }
