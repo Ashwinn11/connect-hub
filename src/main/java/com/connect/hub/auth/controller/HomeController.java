@@ -15,6 +15,6 @@ public class HomeController {
 
     @GetMapping
     public String getEnd() {
-        return "index";
+        return "Welcome to home page";
     }
 }
