@@ -2,9 +2,7 @@ package com.connect.hub.profile.service;
 
 import com.connect.hub.auth.model.User;
 import com.connect.hub.profile.dto.ProfileDTO;
-import com.connect.hub.profile.model.ImageData;
 import com.connect.hub.profile.model.Profile;
-import com.connect.hub.profile.repository.ImageRepository;
 import com.connect.hub.profile.repository.ProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,8 +16,6 @@ public class ProfileService {
     @Autowired
     private ProfileRepository profileRepository;
 
-    @Autowired
-    private ImageRepository imageRepository;
 
     public void mapUserToProfile(User user){
         Profile profile = Profile.builder()
@@ -37,12 +33,5 @@ public class ProfileService {
         profileRepository.save(profile);
         return profile;
     }
-    public void imageUpload(MultipartFile file,String emailId) throws IOException {
-        ImageData image = ImageData.builder().name(file.getOriginalFilename())
-                .imageData(file.getBytes())
-                .emailId(emailId)
-                .type(file.getContentType()).build();
-        imageRepository.save(image);
 
-    }
 }

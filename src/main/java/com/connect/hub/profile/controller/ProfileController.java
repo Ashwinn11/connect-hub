@@ -1,7 +1,6 @@
 package com.connect.hub.profile.controller;
 
 import com.connect.hub.profile.dto.ProfileDTO;
-import com.connect.hub.profile.model.ImageData;
 import com.connect.hub.profile.model.Profile;
 import com.connect.hub.profile.repository.ProfileRepository;
 import com.connect.hub.profile.service.ProfileService;
@@ -41,9 +40,5 @@ public class ProfileController {
 
         return profileService.editProfile(profileDto,getEmailFromAuthentication());
     }
-    @PostMapping("/uploadImage")
-    public ResponseEntity<?> uploadImage(@RequestBody MultipartFile file) throws IOException {
-        profileService.imageUpload(file,emailId);
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
-    }
+
 }
