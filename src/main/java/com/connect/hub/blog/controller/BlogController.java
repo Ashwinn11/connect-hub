@@ -5,16 +5,19 @@ import com.connect.hub.blog.model.BlogDTO;
 import com.connect.hub.blog.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-@Controller
+import java.io.IOException;
+import java.util.List;
+
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
+@RestController
 @RequestMapping("/blogs")
 @CrossOrigin
 public class BlogController {
@@ -22,11 +25,22 @@ public class BlogController {
     @Autowired
     private BlogService blogService;
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    final String emailId = authentication.getName();
+    final String emailId = "ashwinnanbazhagan@gmail.com";
 
-    @PostMapping("/publish")
-    public ResponseEntity<?> publishBlog(@RequestBody BlogDTO blog){
-        blogService.createBlog(blog,emailId);
+    @RequestMapping(path = "/publish", method = POST, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<?> publishBlog(@RequestPart("file") MultipartFile file,@RequestPart("title") String title,@RequestPart("body") String body, @RequestPart("tag") String tag ) throws IOException {
+        BlogDTO blog = new BlogDTO(title,body,tag);
+        blogService.createBlog(blog,emailId,file);
         return new ResponseEntity<>(HttpStatusCode.valueOf(200));
+    }
+
+    @GetMapping("/view")
+    public List<Blog> viewBlogs(){
+        return blogService.getBlogs();
+    }
+
+    @GetMapping("/tag")
+    public List<Blog> getBlogsFromTag(@RequestParam String tag){
+        return blogService.getBlogs(tag);
     }
 }

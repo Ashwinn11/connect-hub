@@ -26,7 +26,7 @@ public class ProfileController {
     private ProfileService profileService;
 
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    String emailId = authentication.getName();
+    final String emailId = "ashwinnanbazhagan@gmail.com";;
 
     public Profile getEmailFromAuthentication(){
         return profileRepository.findByEmailId(emailId);
