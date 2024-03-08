@@ -6,6 +6,8 @@ import com.connect.hub.blog.model.Tag;
 import com.connect.hub.blog.repository.BlogRepository;
 import com.connect.hub.blog.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,6 +15,8 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class BlogService {
@@ -49,5 +53,27 @@ public class BlogService {
             blogList.add(tags.getBlog());
         }
         return blogList;
+    }
+
+    public ResponseEntity<?> editBlog(MultipartFile file, String title, String body, Long id, String emailId) throws IOException {
+        Optional<Blog> optional = blogRepository.findById(id);
+        if(optional.isPresent()){
+            Blog blog = optional.get();
+            if (Objects.equals(emailId, blog.getEmailId())){
+                blog.setBody(body);
+                blog.setFile(file.getBytes());
+                blog.setTitle(title);
+                blogRepository.save(blog);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    public ResponseEntity<?> deleteBlog(Long id, String emailId) {
+        Optional<Blog> optional = blogRepository.findById(id);
+        if(optional.isPresent()){
+            blogRepository.delete(optional.get());
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

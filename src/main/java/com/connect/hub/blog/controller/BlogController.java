@@ -43,4 +43,14 @@ public class BlogController {
     public List<Blog> getBlogsFromTag(@RequestParam String tag){
         return blogService.getBlogs(tag);
     }
+
+    @PutMapping(value = "/edit",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<?> editBlog(@RequestPart MultipartFile file, @RequestPart String title, @RequestPart String body , @RequestParam Long id) throws IOException {
+        return blogService.editBlog(file,title,body,id,emailId);
+    }
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteBlog(@RequestParam Long id){
+        return blogService.deleteBlog(id,emailId);
+    }
+
 }
