@@ -11,6 +11,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import java.util.ArrayList;
@@ -52,6 +57,22 @@ public class BlogService {
         for (Tag tags : tagList){
             blogList.add(tags.getBlog());
         }
+        for (Blog blogs : blogList){
+            byte[] images = blogs.getFile();
+            try {
+                // Convert byte array to BufferedImage
+                ByteArrayInputStream bis = new ByteArrayInputStream(images);
+                BufferedImage image = ImageIO.read(bis);
+                JFrame frame = new JFrame();
+                frame.getContentPane().setLayout(new FlowLayout());
+                frame.getContentPane().add(new JLabel(new ImageIcon(image)));
+                frame.pack();
+                frame.setVisible(true);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         return blogList;
     }
 
@@ -71,9 +92,7 @@ public class BlogService {
 
     public ResponseEntity<?> deleteBlog(Long id, String emailId) {
         Optional<Blog> optional = blogRepository.findById(id);
-        if(optional.isPresent()){
-            blogRepository.delete(optional.get());
-        }
+        optional.ifPresent(blog -> blogRepository.delete(blog));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
