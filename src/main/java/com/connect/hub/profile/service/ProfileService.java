@@ -5,6 +5,8 @@ import com.connect.hub.profile.dto.ProfileDTO;
 import com.connect.hub.profile.model.Profile;
 import com.connect.hub.profile.repository.ProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -27,8 +29,9 @@ public class ProfileService {
                 .build();
         profileRepository.save(profile);
     }
-
-    public Profile editProfile(ProfileDTO profileDto,Profile profile) {
+    @CachePut(value = "profile",key = "#emailId")
+    public Profile editProfile(ProfileDTO profileDto,String emailId) {
+        Profile profile = getProfile(emailId);
         profile.setBio(profileDto.getBio());
         profile.setFirstName(profileDto.getFirstName());
         profile.setLastName(profileDto.getLastName());
@@ -36,12 +39,17 @@ public class ProfileService {
         return profile;
     }
 
+    @CachePut(value="profile",key = "#emailId")
     public ResponseEntity<?> uploadProfilePicture(MultipartFile file, String emailId) throws IOException {
-        Profile profile = profileRepository.findByEmailId(emailId);
+        Profile profile = getProfile(emailId);
         profile.setImageData(file.getBytes());
         profile.setImageName(file.getOriginalFilename());
         profile.setImageType(file.getContentType());
         profileRepository.save(profile);
         return new ResponseEntity<>("Profile picture updated successfully!", HttpStatusCode.valueOf(200));
+    }
+    @Cacheable(value = "profile",key = "#emailId")
+    public Profile getProfile(String emailId) {
+        return profileRepository.findByEmailId(emailId);
     }
 }

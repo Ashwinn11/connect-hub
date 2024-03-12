@@ -6,6 +6,9 @@ import com.connect.hub.blog.model.Tag;
 import com.connect.hub.blog.repository.BlogRepository;
 import com.connect.hub.blog.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -38,6 +41,8 @@ public class BlogService {
                 .body(blog.body)
                 .emailId(emailId)
                 .file(file.getBytes())
+                .fileName(file.getOriginalFilename())
+                .filetype(file.getContentType())
                 .likes(0)
                 .title(blog.title)
                 .build();
@@ -57,42 +62,40 @@ public class BlogService {
         for (Tag tags : tagList){
             blogList.add(tags.getBlog());
         }
-        for (Blog blogs : blogList){
-            byte[] images = blogs.getFile();
-            try {
-                // Convert byte array to BufferedImage
-                ByteArrayInputStream bis = new ByteArrayInputStream(images);
-                BufferedImage image = ImageIO.read(bis);
-                JFrame frame = new JFrame();
-                frame.getContentPane().setLayout(new FlowLayout());
-                frame.getContentPane().add(new JLabel(new ImageIcon(image)));
-                frame.pack();
-                frame.setVisible(true);
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
         return blogList;
     }
-
+    @CacheEvict(value = "profile", key = "#emailId")
+    @CachePut(value = "profile", key = "#emailId")
     public ResponseEntity<?> editBlog(MultipartFile file, String title, String body, Long id, String emailId) throws IOException {
-        Optional<Blog> optional = blogRepository.findById(id);
-        if(optional.isPresent()){
-            Blog blog = optional.get();
-            if (Objects.equals(emailId, blog.getEmailId())){
+        List<Blog> blogList = retrieveBlogs(emailId);
+        for (Blog blog : blogList) {
+            if (blog.getId()==id) {
                 blog.setBody(body);
                 blog.setFile(file.getBytes());
+                blog.setFiletype(file.getContentType());
+                blog.setFileName(file.getOriginalFilename());
                 blog.setTitle(title);
                 blogRepository.save(blog);
             }
         }
+
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
-
+    @CacheEvict(value = "blogs",key = "#emailId")
     public ResponseEntity<?> deleteBlog(Long id, String emailId) {
-        Optional<Blog> optional = blogRepository.findById(id);
-        optional.ifPresent(blog -> blogRepository.delete(blog));
+       List<Blog> blogList = retrieveBlogs(emailId);
+       for (Blog blogs : blogList){
+           if (blogs.getId()==id){
+               blogRepository.deleteById(blogs.getId());
+           }
+       }
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Cacheable(value = "blogs",key = "#emailId")
+    public List<Blog> retrieveBlogs(String emailId){
+        List<Blog> blogList = blogRepository.findByEmailId(emailId);
+        return blogList;
     }
 }

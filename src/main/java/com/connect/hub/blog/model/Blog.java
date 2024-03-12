@@ -27,6 +27,8 @@ public class Blog {
     @Lob
     @Column(columnDefinition = "LONGBLOB")
     private byte[] file;
+    private String fileName;
+    private String filetype;
     private long likes;
     @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL)
     private List<Comment> comments;

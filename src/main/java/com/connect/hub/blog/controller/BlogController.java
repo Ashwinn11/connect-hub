@@ -46,7 +46,6 @@ public class BlogController {
     }
 
     @PutMapping(value = "/edit",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    @CacheEvict("blogs")
     public ResponseEntity<?> editBlog(@RequestPart(required = false) MultipartFile file , @RequestPart String title, @RequestPart String body , @RequestParam Long id) throws IOException {
         return blogService.editBlog(file,title,body,id,emailId);
     }
