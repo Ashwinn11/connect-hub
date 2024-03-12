@@ -14,17 +14,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
+
 
 @Service
 public class BlogService {
@@ -44,6 +40,7 @@ public class BlogService {
                 .fileName(file.getOriginalFilename())
                 .filetype(file.getContentType())
                 .likes(0)
+                .createdAt(LocalDateTime.now())
                 .title(blog.title)
                 .build();
         Tag tag = new Tag();
@@ -97,5 +94,9 @@ public class BlogService {
     public List<Blog> retrieveBlogs(String emailId){
         List<Blog> blogList = blogRepository.findByEmailId(emailId);
         return blogList;
+    }
+
+    public Blog getBlogByID(Long id) {
+        return blogRepository.findById(id).get();
     }
 }

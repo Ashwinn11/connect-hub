@@ -7,9 +7,6 @@ import com.connect.hub.profile.model.Profile;
 import com.connect.hub.profile.repository.ProfileRepository;
 import com.connect.hub.profile.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -37,10 +34,6 @@ public class ProfileController {
 
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     final String emailId = "ashwinnanbazhagan@gmail.com";
-
-    public Profile getEmailFromAuthentication(){
-        return profileRepository.findByEmailId(emailId);
-    }
 
 
     @GetMapping()

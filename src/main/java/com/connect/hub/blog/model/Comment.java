@@ -1,5 +1,6 @@
 package com.connect.hub.blog.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,5 +17,6 @@ public class Comment {
     private String comment;
     @ManyToOne
     @JoinColumn(name="blog_id")
+    @JsonIgnore
     private Blog blog;
 }

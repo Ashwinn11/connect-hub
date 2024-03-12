@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -30,6 +31,7 @@ public class Blog {
     private String fileName;
     private String filetype;
     private long likes;
+    private LocalDateTime createdAt;
     @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL)
     private List<Comment> comments;
 }
