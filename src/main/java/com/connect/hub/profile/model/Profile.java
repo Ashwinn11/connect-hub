@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @Builder
 public class Profile {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(nullable = false)
@@ -23,6 +23,14 @@ public class Profile {
 
     @Column(nullable = false)
     private String lastName;
+
+    @Lob
+    @Column(columnDefinition = "LONGBLOB")
+    private byte[] imageData;
+
+    private String imageName;
+
+    private String imageType;
 
     @Column(nullable = false,unique = true)
     private String emailId;

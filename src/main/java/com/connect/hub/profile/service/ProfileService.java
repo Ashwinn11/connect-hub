@@ -5,6 +5,8 @@ import com.connect.hub.profile.dto.ProfileDTO;
 import com.connect.hub.profile.model.Profile;
 import com.connect.hub.profile.repository.ProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,4 +36,12 @@ public class ProfileService {
         return profile;
     }
 
+    public ResponseEntity<?> uploadProfilePicture(MultipartFile file, String emailId) throws IOException {
+        Profile profile = profileRepository.findByEmailId(emailId);
+        profile.setImageData(file.getBytes());
+        profile.setImageName(file.getOriginalFilename());
+        profile.setImageType(file.getContentType());
+        profileRepository.save(profile);
+        return new ResponseEntity<>("Profile picture updated successfully!", HttpStatusCode.valueOf(200));
+    }
 }

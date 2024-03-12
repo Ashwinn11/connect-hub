@@ -6,6 +6,7 @@ import com.connect.hub.profile.repository.ProfileRepository;
 import com.connect.hub.profile.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,7 +27,7 @@ public class ProfileController {
     private ProfileService profileService;
 
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    final String emailId = "ashwinnanbazhagan@gmail.com";;
+    final String emailId = "ashwinnanbazhagan@gmail.com";
 
     public Profile getEmailFromAuthentication(){
         return profileRepository.findByEmailId(emailId);
@@ -39,6 +40,11 @@ public class ProfileController {
     public Profile editProfile(@RequestBody ProfileDTO  profileDto){
 
         return profileService.editProfile(profileDto,getEmailFromAuthentication());
+    }
+
+    @PostMapping(value = "/uploadImage", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<?> uploadImage(@RequestPart(required = false) MultipartFile file) throws IOException {
+        return profileService.uploadProfilePicture(file,emailId);
     }
 
 }
