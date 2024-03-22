@@ -10,6 +10,5 @@ import lombok.RequiredArgsConstructor;
 @Data
 public class CommunityDTO {
     private String name;
-    private String emailId;
     private String description;
 }

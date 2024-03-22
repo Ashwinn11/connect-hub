@@ -29,8 +29,8 @@ public class UserService {
     private EmailService emailService;
     public ResponseEntity<?> sendOTP(Signup signup) throws CustomException {
 
-        User user = getUserByEmailId(signup.getEmailId());
-        if (user !=null) {
+        Optional<User> user = userRepository.findByEmailId(signup.getEmailId());
+        if (user.isPresent()) {
             return new ResponseEntity<>("Email-ID already exists. Please try logging in!",HttpStatus.IM_USED);
         }
         return emailService.sendSignupEmail(signup.getEmailId());

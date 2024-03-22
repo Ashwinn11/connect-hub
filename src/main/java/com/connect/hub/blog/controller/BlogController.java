@@ -25,13 +25,11 @@ public class BlogController {
 
     @Autowired
     private BlogService blogService;
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    final String emailId = authentication.getName();
 
     @RequestMapping(path = "/publish", method = POST, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<?> publishBlog(@RequestPart(required = false) MultipartFile file,@RequestPart("title") String title,@RequestPart("body") String body, @RequestPart("tag") String tag ) throws IOException {
         BlogDTO blog = new BlogDTO(title,body,tag);
-        blogService.createBlog(blog,emailId,file);
+        blogService.createBlog(blog,getEmailId(),file);
         return new ResponseEntity<>(HttpStatusCode.valueOf(200));
     }
 
@@ -47,12 +45,17 @@ public class BlogController {
 
     @PutMapping(value = "/edit",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<?> editBlog(@RequestPart(required = false) MultipartFile file , @RequestPart String title, @RequestPart String body , @RequestParam Long id) throws IOException {
-        return blogService.editBlog(file,title,body,id,emailId);
+        return blogService.editBlog(file,title,body,id,getEmailId());
     }
 
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteBlog(@RequestParam Long id){
-        return blogService.deleteBlog(id,emailId);
+        return blogService.deleteBlog(id,getEmailId());
+    }
+
+    public String getEmailId(){
+        String emailId = SecurityContextHolder.getContext().getAuthentication().getName();
+        return emailId;
     }
 
 }

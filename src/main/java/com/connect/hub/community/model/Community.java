@@ -28,9 +28,9 @@ public class Community {
     private LocalDate creationDate;
     private String createdBy;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "user_community",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "community_id"))
+           joinColumns = @JoinColumn(name = "community_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> users;
 }

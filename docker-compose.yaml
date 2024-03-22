@@ -13,20 +13,6 @@ services:
       - "3306:3306"
     networks:
       - connect
-  mongodb:
-    image: mongo
-    container_name: mongodb-container
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: database
-      MONGO_INITDB_DATABASE: event
-    ports:
-      - "27017:27017"
-    networks:
-      - connect
-    volumes:
-      - mongodb:/data/db
   adminer:
     image: dockette/adminer:full
     container_name: adminer-container
@@ -35,7 +21,6 @@ services:
       - "9000:80"
     depends_on:
       - mysqldb
-      - mongodb
     networks:
       - connect
 networks:
@@ -43,5 +28,4 @@ networks:
 volumes:
   mysqldb:
     driver: local
-  mongodb:
-    driver: local
+

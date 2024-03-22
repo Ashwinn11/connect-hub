@@ -24,9 +24,6 @@ public class CommentController {
     private BlogService blogService;
 
 
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    final String emailId = authentication.getName();
-
     @PostMapping("/{id}")
     public ResponseEntity<?> addComment(@PathVariable Long id, @RequestBody Comment comment){
         Blog blog = blogService.getBlogByID(id);

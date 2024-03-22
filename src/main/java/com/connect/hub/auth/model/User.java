@@ -35,7 +35,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     public Role role;
 
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "users",fetch = FetchType.LAZY)
     public List<Community> communities;
 
 
