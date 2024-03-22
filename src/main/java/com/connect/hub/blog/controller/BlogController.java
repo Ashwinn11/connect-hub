@@ -26,7 +26,7 @@ public class BlogController {
     @Autowired
     private BlogService blogService;
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    final String emailId = "ashwinnanbazhagan@gmail.com";
+    final String emailId = authentication.getName();
 
     @RequestMapping(path = "/publish", method = POST, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<?> publishBlog(@RequestPart(required = false) MultipartFile file,@RequestPart("title") String title,@RequestPart("body") String body, @RequestPart("tag") String tag ) throws IOException {

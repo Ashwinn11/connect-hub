@@ -5,6 +5,7 @@ import com.connect.hub.auth.service.UserService;
 import com.connect.hub.community.model.CommunityDTO;
 import com.connect.hub.community.service.CommunityService;
 import com.connect.hub.exception.CustomException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ public class CommunityController{
     }
 
     @PostMapping("/join-community")
+    @Transactional
     public ResponseEntity<?> joinCommunity(@RequestParam Long id) throws CustomException {
         String emailId = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.getUserByEmailId(emailId);

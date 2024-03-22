@@ -25,7 +25,7 @@ public class CommentController {
 
 
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    final String emailId = "ashwinnanbazhagan@gmail.com";
+    final String emailId = authentication.getName();
 
     @PostMapping("/{id}")
     public ResponseEntity<?> addComment(@PathVariable Long id, @RequestBody Comment comment){
