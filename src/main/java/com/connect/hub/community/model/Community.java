@@ -7,7 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDate;
+
 import java.util.List;
 
 @Entity
@@ -24,8 +25,7 @@ public class Community {
     private String name;
 
     private String description;
-    private Date creationDate;
-
+    private LocalDate creationDate;
     private String createdBy;
 
     @ManyToMany

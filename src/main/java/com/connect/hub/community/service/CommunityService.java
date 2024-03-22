@@ -1,4 +1,46 @@
 package com.connect.hub.community.service;
 
+import com.connect.hub.auth.model.User;
+import com.connect.hub.community.model.Community;
+import com.connect.hub.community.model.CommunityDTO;
+import com.connect.hub.community.repository.CommunityRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.autoconfigure.observation.ObservationProperties;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
 public class CommunityService {
+
+    @Autowired
+    private CommunityRepository communityRepository;
+    public void createCommunity(CommunityDTO communityDTO) {
+        Community  community = new Community();
+        community.setCreatedBy(communityDTO.getEmailId());
+        community.setName(communityDTO.getName());
+        community.setCreationDate(LocalDate.now());
+        community.setDescription(communityDTO.getDescription());
+        communityRepository.save(community);
+
+    }
+
+    public ResponseEntity<?> joinCommunity(User user,Long id) {
+        Optional<Community> optionalCommunity = communityRepository.findById(id);
+        if(optionalCommunity.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Community community = optionalCommunity.get();
+        List<User> userList = community.getUsers();
+        if (userList.contains(user)){
+            return new ResponseEntity<>("You are already enrolled to the community.!",HttpStatus.FOUND);
+        }
+        userList.add(user);
+        community.setUsers(userList);
+        communityRepository.save(community);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+
+    }
 }
