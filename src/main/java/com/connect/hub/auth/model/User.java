@@ -1,5 +1,6 @@
 package com.connect.hub.auth.model;
 
+import com.connect.hub.community.model.Community;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,6 +34,9 @@ public class User implements UserDetails {
     public String mobileNo;
     @Enumerated(EnumType.STRING)
     public Role role;
+
+    @ManyToMany(mappedBy = "users")
+    public List<Community> communities;
 
 
     @Override
