@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @AllArgsConstructor
 @RequiredArgsConstructor
@@ -14,11 +16,11 @@ import lombok.RequiredArgsConstructor;
 @Data
 public class Tag {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
     private String name;
-    @ManyToOne
-    @JoinColumn(name = "blog_id",nullable = false)
-    @JsonIgnore
-    private Blog blog;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "tag_blog",
+            joinColumns = @JoinColumn(name = "tag_id"),
+            inverseJoinColumns = @JoinColumn(name = "blog_id"))
+    private List<Blog> blogs;
+
 }

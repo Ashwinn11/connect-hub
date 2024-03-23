@@ -3,6 +3,7 @@ package com.connect.hub.blog.controller;
 import com.connect.hub.blog.model.Blog;
 import com.connect.hub.blog.model.BlogDTO;
 import com.connect.hub.blog.service.BlogService;
+import com.connect.hub.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatusCode;
@@ -27,7 +28,7 @@ public class BlogController {
     private BlogService blogService;
 
     @RequestMapping(path = "/publish", method = POST, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<?> publishBlog(@RequestPart(required = false) MultipartFile file,@RequestPart("title") String title,@RequestPart("body") String body, @RequestPart("tag") String tag ) throws IOException {
+    public ResponseEntity<?> publishBlog(@RequestPart(required = false) MultipartFile file,@RequestPart("title") String title,@RequestPart("body") String body, @RequestPart("tag") String tag ) throws IOException, InterruptedException {
         BlogDTO blog = new BlogDTO(title,body,tag);
         blogService.createBlog(blog,getEmailId(),file);
         return new ResponseEntity<>(HttpStatusCode.valueOf(200));
@@ -39,7 +40,7 @@ public class BlogController {
     }
 
     @GetMapping("/tag")
-    public List<Blog> getBlogsFromTag(@RequestParam String tag){
+    public List<Blog> getBlogsFromTag(@RequestParam String tag) throws CustomException {
         return blogService.getBlogs(tag);
     }
 
@@ -55,7 +56,7 @@ public class BlogController {
 
     public String getEmailId(){
         String emailId = SecurityContextHolder.getContext().getAuthentication().getName();
-        return emailId;
+        return emailId="ashwinnanbazhagan@gmail.com";
     }
 
 }

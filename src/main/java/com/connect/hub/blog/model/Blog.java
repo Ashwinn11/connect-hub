@@ -1,5 +1,6 @@
 package com.connect.hub.blog.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,10 +24,11 @@ public class Blog {
     @Lob
     @Column(columnDefinition = "LONGTEXT")
     private String body;
-    @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "blogs",fetch = FetchType.LAZY)
     private List<Tag> tag;
     @Lob
     @Column(columnDefinition = "LONGBLOB")
+    @JsonIgnore
     private byte[] file;
     private String fileName;
     private String filetype;
