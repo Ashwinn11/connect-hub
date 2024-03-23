@@ -6,6 +6,7 @@ import com.connect.hub.blog.model.Tag;
 import com.connect.hub.blog.repository.BlogRepository;
 import com.connect.hub.blog.repository.TagRepository;
 import com.connect.hub.exception.CustomException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -32,7 +33,7 @@ public class BlogService {
 
     @Autowired
     private TagRepository tagRepository;
-
+    @Transactional
     public void createBlog(BlogDTO blog, String emailId, MultipartFile file) throws IOException, InterruptedException {
 
         Blog blogData = Blog.builder()

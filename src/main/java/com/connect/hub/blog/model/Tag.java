@@ -21,6 +21,7 @@ public class Tag {
     @JoinTable(name = "tag_blog",
             joinColumns = @JoinColumn(name = "tag_id"),
             inverseJoinColumns = @JoinColumn(name = "blog_id"))
+    @JsonIgnore
     private List<Blog> blogs;
 
 }
