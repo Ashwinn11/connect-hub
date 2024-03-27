@@ -30,7 +30,7 @@ public class CommentController {
     @PostMapping("/{id}")
     public ResponseEntity<?> addComment(@PathVariable Long id, @RequestBody Comment comment){
         Blog blog = blogService.getBlogByID(id);
-        String sentBy = comment.getEmailId();
+        String sentBy = SecurityContextHolder.getContext().getAuthentication().getName();
         String commentedOn = blog.getEmailId();
         kafkaProducer.sendMessage("comment-notification",commentedOn);
         Comment getComment = commentService.createComment(blog,comment,sentBy);

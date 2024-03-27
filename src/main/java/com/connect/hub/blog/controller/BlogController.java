@@ -64,7 +64,7 @@ public class BlogController {
 
     public String getEmailId(){
         String emailId = SecurityContextHolder.getContext().getAuthentication().getName();
-        return emailId="ashwinnanbazhagan@gmail.com";
+        return emailId;
     }
 
 }
