@@ -15,6 +15,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String comment;
+    private String emailId;
     @ManyToOne
     @JoinColumn(name="blog_id")
     @JsonIgnore

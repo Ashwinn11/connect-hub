@@ -8,9 +8,6 @@ import com.connect.hub.blog.repository.TagRepository;
 import com.connect.hub.exception.CustomException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,11 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
@@ -33,9 +27,9 @@ public class BlogService {
 
     @Autowired
     private TagRepository tagRepository;
-    @Transactional
-    public void createBlog(BlogDTO blog, String emailId, MultipartFile file) throws IOException, InterruptedException {
-
+    @Transactional(rollbackOn = Exception.class)
+    public void createBlog(BlogDTO blog, String emailId) throws IOException, InterruptedException {
+        MultipartFile file = blog.file;
         Blog blogData = Blog.builder()
                 .body(blog.body)
                 .emailId(emailId)
@@ -46,28 +40,37 @@ public class BlogService {
                 .createdAt(LocalDateTime.now())
                 .title(blog.title)
                 .build();
-        Optional<Tag> optional = tagRepository.findById(blog.tag);
-        if(optional.isPresent()){
-            List<Blog> blogList = optional.get().getBlogs();
+        Tag tag = null;
+        try {
+            tag = createOrUpdateTag(blog.tag, blogData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (tag != null) {
+            blogData.setTag(List.of(tag));
+        }
+        blogRepository.save(blogData);
+    }
+    public synchronized Tag createOrUpdateTag(String tagName ,Blog blogData) throws InterruptedException {
+        Optional<Tag> optional = tagRepository.findById(tagName);
+        if (optional.isPresent()) {
+            Tag tag = optional.get();
+            List<Blog> blogList = tag.getBlogs();
             blogList.add(blogData);
-            optional.get().setBlogs(blogList);
-            blogData.setTag(List.of(optional.get()));
-        }else{
+            tag.setBlogs(blogList);
+            return tagRepository.save(tag);
+        } else {
             Tag tag = new Tag();
-            tag.setName(blog.tag);
+            tag.setName(tagName);
             tag.setBlogs(List.of(blogData));
             try {
-                tagRepository.save(tag);
+                return tagRepository.save(tag);
+            } catch (Exception e) {
+                // Handle duplicate entry exception
+                Thread.sleep(2000); // Wait before retrying
+                return createOrUpdateTag(tagName, blogData); // Retry tag creation
             }
-            catch (Exception duplicateEntry){
-                Thread.sleep(2000);
-                tagRepository.save(tag);
-            }
-            blogData.setTag(List.of(tag));
-
         }
-
-        blogRepository.save(blogData);
     }
 
     public List<Blog> getBlogs() {
@@ -81,35 +84,34 @@ public class BlogService {
         List<Blog> blogList = blogRepository.findByTag(tag.get());
         return blogList;
     }
-    @CacheEvict(value = "profile", key = "#emailId")
-    @CachePut(value = "profile", key = "#emailId")
-    public ResponseEntity<?> editBlog(MultipartFile file, String title, String body, Long id, String emailId) throws IOException {
-        List<Blog> blogList = retrieveBlogs(emailId);
-        for (Blog blog : blogList) {
-            if (blog.getId()==id) {
-                blog.setBody(body);
-                blog.setFile(file.getBytes());
-                blog.setFiletype(file.getContentType());
-                blog.setFileName(file.getOriginalFilename());
-                blog.setTitle(title);
-                blogRepository.save(blog);
-            }
+
+    public ResponseEntity<?> editBlog(BlogDTO blogDTO, Long id, String emailId) throws IOException {
+        Optional<Blog> optional = blogRepository.findById(id);
+        if(Objects.equals(emailId,optional.get().getEmailId())){
+            Blog blog = optional.get();
+            blog.setTitle(blogDTO.title);
+            blog.setBody(blogDTO.body);
+            blog.setFile(blogDTO.file.getBytes());
+            blog.setFiletype(blogDTO.file.getContentType());
+            blog.setFileName(blogDTO.file.getOriginalFilename());
+            blogRepository.save(blog);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
-    }
-    @CacheEvict(value = "blogs",key = "#emailId")
-    public ResponseEntity<?> deleteBlog(Long id, String emailId) {
-       List<Blog> blogList = retrieveBlogs(emailId);
-       for (Blog blogs : blogList){
-           if (blogs.getId()==id){
-               blogRepository.deleteById(blogs.getId());
-           }
-       }
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Cacheable(value = "blogs",key = "#emailId")
+    public ResponseEntity<?> deleteBlog(Long id, String emailId) {
+        Optional<Blog> blog = blogRepository.findById(id);
+        if (Objects.equals(blog.get().getEmailId(), emailId)) {
+            blogRepository.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+
     public List<Blog> retrieveBlogs(String emailId){
         List<Blog> blogList = blogRepository.findByEmailId(emailId);
         return blogList;

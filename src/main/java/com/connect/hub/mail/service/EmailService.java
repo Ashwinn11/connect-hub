@@ -85,6 +85,15 @@ public class EmailService {
 
     }
 
+    public void sendCommentNotification(String emailId){
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(emailId);
+        mailMessage.setSubject("Wake-up! ");
+        String text = "Someone commented on your post";
+        mailMessage.setText(text);
+        javaMailSender.send(mailMessage);
+    }
+
     public ResponseEntity<?> recoverOtp(String emailId) {
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }

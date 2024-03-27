@@ -16,7 +16,6 @@ public class EmailController {
     @Autowired
     private EmailService emailService;
 
-
     @PostMapping("/signup/verify")
     public ResponseEntity<?> verifyOtp(@RequestParam int otp , @RequestParam String emailId , @RequestBody Signup signup){
         return emailService.verifyOtp(otp,emailId,signup);

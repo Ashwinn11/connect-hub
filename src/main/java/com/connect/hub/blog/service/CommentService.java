@@ -11,12 +11,14 @@ import java.util.List;
 @Service
 public class CommentService {
 
+
     @Autowired
     private CommentRepository commentRepository;
-    public Comment createComment(Blog blog, Comment comment) {
+    public Comment createComment(Blog blog, Comment comment,String sentBy) {
         Comment savedComment = new Comment();
         savedComment.setComment(comment.getComment());
         savedComment.setBlog(blog);
+        savedComment.setEmailId(sentBy);
         commentRepository.save(savedComment);
         return savedComment;
     }

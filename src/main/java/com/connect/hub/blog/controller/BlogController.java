@@ -29,8 +29,12 @@ public class BlogController {
 
     @RequestMapping(path = "/publish", method = POST, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<?> publishBlog(@RequestPart(required = false) MultipartFile file,@RequestPart("title") String title,@RequestPart("body") String body, @RequestPart("tag") String tag ) throws IOException, InterruptedException {
-        BlogDTO blog = new BlogDTO(title,body,tag);
-        blogService.createBlog(blog,getEmailId(),file);
+        BlogDTO blog = new BlogDTO();
+        blog.setTitle(title);
+        blog.setTag(tag);
+        blog.setFile(file);
+        blog.setBody(body);
+        blogService.createBlog(blog,getEmailId());
         return new ResponseEntity<>(HttpStatusCode.valueOf(200));
     }
 
@@ -46,7 +50,11 @@ public class BlogController {
 
     @PutMapping(value = "/edit",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<?> editBlog(@RequestPart(required = false) MultipartFile file , @RequestPart String title, @RequestPart String body , @RequestParam Long id) throws IOException {
-        return blogService.editBlog(file,title,body,id,getEmailId());
+        BlogDTO blog = new BlogDTO();
+        blog.setTitle(title);
+        blog.setFile(file);
+        blog.setBody(body);
+        return blogService.editBlog(blog,id,getEmailId());
     }
 
     @DeleteMapping("/delete")

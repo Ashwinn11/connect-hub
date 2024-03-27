@@ -4,6 +4,7 @@ import com.connect.hub.blog.model.Blog;
 import com.connect.hub.blog.model.Comment;
 import com.connect.hub.blog.service.BlogService;
 import com.connect.hub.blog.service.CommentService;
+import com.connect.hub.kafka.producer.KafkaProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,11 +24,16 @@ public class CommentController {
     @Autowired
     private BlogService blogService;
 
+    @Autowired
+    private KafkaProducer kafkaProducer;
 
     @PostMapping("/{id}")
     public ResponseEntity<?> addComment(@PathVariable Long id, @RequestBody Comment comment){
         Blog blog = blogService.getBlogByID(id);
-        Comment getComment = commentService.createComment(blog,comment);
+        String sentBy = comment.getEmailId();
+        String commentedOn = blog.getEmailId();
+        kafkaProducer.sendMessage("comment-notification",commentedOn);
+        Comment getComment = commentService.createComment(blog,comment,sentBy);
         return new ResponseEntity<>(getComment, HttpStatus.OK);
     }
 
