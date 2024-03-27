@@ -37,7 +37,8 @@ public class EmailService {
     private ProfileService profileService;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private UserService userService;
+
 
 
     public ResponseEntity<?> sendSignupEmail(String emailId){
@@ -50,13 +51,13 @@ public class EmailService {
         mailMessage.setText(text);
         javaMailSender.send(mailMessage);
         otpObject(emailId,otp);
-        return new ResponseEntity<>("Email sent successfully! Please entry the otp for verification.",HttpStatus.ACCEPTED);
+        return new ResponseEntity<>("Email sent successfully! Please entry the otp for verification.",HttpStatus.OK);
     }
 
     public ResponseEntity<?> verifyOtp(int otp, String emailId, Signup signup){
         OTP object = otpRepository.findByEmailId(emailId);
         if (object.getOtp() == otp && LocalDateTime.now().isBefore(object.getCreationTime().plusSeconds(60))){
-            User user = buildUser(signup);
+            User user = userService.buildUser(signup);
             userRepository.save(user);
             profileService.mapUserToProfile(user);
             return new ResponseEntity<>("Sign-up successful.", HttpStatus.ACCEPTED);
@@ -73,17 +74,7 @@ public class EmailService {
         otpRepository.save(otpObject);
     }
 
-    public User buildUser(Signup signup){
-        User user = User.builder()
-                .firstName(signup.getFirstName())
-                .lastName(signup.getLastName())
-                .emailId(signup.getEmailId())
-                .mobileNo(signup.getMobileNo())
-                .password(passwordEncoder.encode(signup.getPassword()))
-                .role(Role.USER).build();
-        return user;
 
-    }
 
     public void sendCommentNotification(String emailId){
         SimpleMailMessage mailMessage = new SimpleMailMessage();

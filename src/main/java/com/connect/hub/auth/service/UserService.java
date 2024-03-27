@@ -27,6 +27,10 @@ public class UserService {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public ResponseEntity<?> sendOTP(Signup signup) throws CustomException {
 
         Optional<User> user = userRepository.findByEmailId(signup.getEmailId());
@@ -43,6 +47,18 @@ public class UserService {
             throw new CustomException("User not found");
         }
         return user.get();
+    }
+
+    public User buildUser(Signup signup){
+        User user = User.builder()
+                .firstName(signup.getFirstName())
+                .lastName(signup.getLastName())
+                .emailId(signup.getEmailId())
+                .mobileNo(signup.getMobileNo())
+                .password(passwordEncoder.encode(signup.getPassword()))
+                .role(Role.USER).build();
+        return user;
+
     }
 
 

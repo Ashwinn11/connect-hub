@@ -33,7 +33,7 @@ public class ProfileController {
     private BlogService blogService;
 
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    final String emailId = "ashwinnanbazhagan@gmail.com";
+    final String emailId = authentication.getName();
 
 
     @GetMapping()
@@ -53,7 +53,6 @@ public class ProfileController {
     }
 
     @GetMapping("/blogs")
-
     public ResponseEntity<?> getBlogs(){
        List<Blog> blogList = blogService.retrieveBlogs(emailId);
        return new ResponseEntity<>(blogList,HttpStatus.OK);

@@ -13,7 +13,6 @@ public class SignupController {
 
     @Autowired
     private UserService userService;
-
     @Autowired
     private EmailService emailService;
     @PostMapping("/signup")
